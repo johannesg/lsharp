@@ -54,3 +54,5 @@ test form "{ :a :b }"
 test form "{ :a,:b }"
 test form "{ :a ,:b }"
 test form "{ :a, :b :c }"
+
+test parser "   :a  "

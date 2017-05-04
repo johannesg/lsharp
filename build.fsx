@@ -37,7 +37,6 @@ Target "Test" (fun _ ->
                |> Fuchu
 )
 
-
 "Compile"
 ==> "Default"
 

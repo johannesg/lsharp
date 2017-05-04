@@ -1,4 +1,4 @@
-﻿module lsharp.parser
+﻿module LSharp.Core.Parser
 
 open FParsec
 open FParsec.Primitives
@@ -30,32 +30,32 @@ type Form =
 | Vector of Form[]
 | Map of Map<Form,Form>
 
-let ch2str cl =
-    string (List.fold
-              (fun (sb:StringBuilder) (c:char) -> sb.Append(c))
-              (new StringBuilder())
-              cl)
+let ws : Parser<_> = spaces
+let ws1 : Parser<_> = spaces1
 
-// let ch : Parser<_> = choice [pchar 'a' ; pchar 'b']
-
-let pname : Parser<_> =
-    let special = anyOf "*+!-_\'"
-    let first = choice [special; letter]
-    let foll = choice [special; letter; digit]
-
-    first .>>. many foll
-    |>> (fun (a,b) -> ch2str (a :: b))
+// let pname label : Parser<_> =
+    // |>> (fun (a,b) -> ch2str (a :: b))
 
 let symbol : Parser<_> =
-    pname |>> (fun x -> Symbol(x))
+    let isSpecial = isAnyOf "*+!-_\'./"
+    let firstChar c = not (isDigit c)
+    let nextChar c = isSpecial c || isLetter c || isDigit c
+
+    many1Satisfy2L firstChar nextChar "symbol"
+    |>> (fun x -> Symbol(x))
 
 let keyword : Parser<_> =
-    pchar ':' >>. pname |>> (fun x -> Keyword(x))
+    let isSpecial = isAnyOf "*+!-_\'."
+    let firstChar c = c = ':'
+    let nextChar c = isSpecial c || isLetter c || isDigit c
+
+    many1Satisfy2L firstChar nextChar "keyword"
+    |>> (fun x -> Keyword(x))
     
 let pbool : Parser<_> =
-    let ptrue = pstring "true" >>% true
-    let pfalse = pstring "false" >>% false
-    choice [ptrue; pfalse] |>> (fun x -> Boolean(x))
+    let ptrue = stringReturn "true" (Boolean(true))
+    let pfalse = stringReturn "false" (Boolean(false))
+    ptrue <|> pfalse
 
 // http://www.quanttec.com/fparsec/reference/charparsers.html#members.numberLiteral
 
@@ -103,7 +103,7 @@ let pnumber : Parser<_> =
 
 let pnumber2 :Parser<_> = pnumber |>> (fun x -> Number(x))
 
-let nil : Parser<_> = pstring "nil" >>% Nil
+let nil : Parser<_> = stringReturn "nil" Nil
 
 let literal : Parser<_> = choice [nil;pnumber2;pbool;keyword] |>> (fun x -> Literal(x))
 
@@ -112,12 +112,14 @@ let form : Parser<_> =
 
     let formSeq = spaces >>. (sepEndBy form spaces1)
 
+    let betweench cb ce p = between (pchar cb) (pchar ce) p
+
     let plist =
-        pchar '(' >>. formSeq .>> (pchar ')')
+        betweench '(' ')' formSeq
         |>> (fun x -> List(x))
 
     let pvec =
-        pchar '[' >>. formSeq .>> (pchar ']')
+        betweench '[' ']' formSeq
         |>> (fun x -> Vector(Array.ofList x))
 
     let pmap =
@@ -128,9 +130,11 @@ let form : Parser<_> =
 
         let kvseq = spaces >>. (sepEndBy keyvalue spaces1)
 
-        pchar '{' >>. kvseq .>> (pchar '}')
+        betweench '{' '}' kvseq 
         |>> (fun x -> Map( Map.ofList x))
 
     do formImpl := choice [literal;symbol;plist;pvec;pmap]
     form
 
+let parser : Parser<_> =
+    ws >>. form .>> (ws .>> eof)
