@@ -38,7 +38,7 @@ let ws1 : Parser<_> = spaces1
 
 let symbol : Parser<_> =
     let isSpecial = isAnyOf "*+!-_\'./"
-    let firstChar c = not (isDigit c)
+    let firstChar c = isSpecial c || isLetter c
     let nextChar c = isSpecial c || isLetter c || isDigit c
 
     many1Satisfy2L firstChar nextChar "symbol"
@@ -110,7 +110,7 @@ let literal : Parser<_> = choice [nil;pnumber2;pbool;keyword] |>> (fun x -> Lite
 let form : Parser<_> =
     let form, formImpl = createParserForwardedToRef<Form, unit>()
 
-    let formSeq = spaces >>. (sepEndBy form spaces1)
+    let formSeq = spaces >>. (sepEndBy form spaces)
 
     let betweench cb ce p = between (pchar cb) (pchar ce) p
 
@@ -134,6 +134,7 @@ let form : Parser<_> =
         |>> (fun x -> Map( Map.ofList x))
 
     do formImpl := choice [literal;symbol;plist;pvec;pmap]
+    //do formImpl := plist
     form
 
 let parser : Parser<_> =

@@ -61,6 +61,8 @@ let parseTests =
         test symbol "ns1%bb"
         test symbol "+"
 
+        test form "12.34"
+
         test pbool "false"
 
         test form "++"

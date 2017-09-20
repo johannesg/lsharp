@@ -1,10 +1,12 @@
 ﻿// Learn more about F# at http://fsharp.org. See the 'F# Tutorial' project
 // for more guidance on F# programming.
 
-#r "../../packages/FParsec/lib/portable-net45+netcore45+wpa81+wp8/FParsecCS.dll"
-#r "../../packages/FParsec/lib/portable-net45+netcore45+wpa81+wp8/FParsec.dll"
-#load "Library1.fs"
-open lsharp.lib
+#r "../../packages/FParsec/lib/net40-client/FParsecCS.dll"
+#r "../../packages/FParsec/lib/net40-client/FParsec.dll"
+// #r "../../packages/FParsec/lib/portable-net45+win8+wp8+wpa81/FParsecCS.dll"
+// #r "../../packages/FParsec/lib/portable-net45+win8+wp8+wpa81/FParsec.dll"
+#load "Parser.fs"
+open LSharp.Core.Parser
 open FParsec
 
 // Define your library scripting code here
@@ -36,7 +38,9 @@ test form "1"
 
 test form ":apa"
 
+test form "( :a :a )"
 test form "(:a :a)"
+test form "(:a ) "
 test form "( :a (:b :c))"
 test form "(:a )"
 test form "( :a)"
