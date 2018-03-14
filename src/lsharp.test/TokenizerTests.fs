@@ -1,8 +1,8 @@
-﻿module LSharp.Test.ParserTests
+﻿module LSharp.Test.TokenizerTests
 
 open Expecto
 open FParsec
-open LSharp.Core.Parser
+open LSharp.Core.Tokenizer
 
 let test p str =
     let name = sprintf "Parsing: '%s'" str
@@ -23,7 +23,7 @@ let testSymbol p str =
     testCase name <| fun _ ->
         match run p str with
         | Success(result, _, _) -> 
-            Expect.equal str "Should parse everything" result
+            Expect.equal str result "Should parse everything"
             //printf "Success: %A\n" result
         | Failure(errorMsg, _, _) -> 
             //printf "Failure: %s" errorMsg |> ignore
@@ -45,8 +45,8 @@ let testFail p str =
 
 [<Tests>]
 let parseTests = 
-    testList "Various parses" [
-        test symbol "++ -"
+    testList "Various tokens" [
+        test tokenList "++ -"
         test symbol "_+a+sdf"
         test symbol "_öäå"
 
@@ -61,36 +61,36 @@ let parseTests =
         test symbol "ns1%bb"
         test symbol "+"
 
-        test form "12.34"
+        test tokenList "12.34"
 
         test pbool "false"
 
-        test form "++"
-        test form "true false"
-        test form "+e"
-        test form "1"
+        test tokenList "++"
+        test tokenList "true false"
+        test tokenList "+e"
+        test tokenList "1"
 
-        test form ":apa"
+        test tokenList ":apa"
 
-        test form "(:a :a)"
-        test form "( :a (:b :c))"
-        test form "(:a )"
-        test form "( :a)"
-        test form "()"
-        test form "( )"
+        test tokenList "(:a :a)"
+        test tokenList "( :a (:b :c))"
+        test tokenList "(:a )"
+        test tokenList "( :a)"
+        test tokenList "()"
+        test tokenList "( )"
 
-        test form "[:a :a]"
-        test form "( :a [:b :c])"
-        test form "[:a ]"
-        test form "[ :a]"
-        test form "[]"
-        test form "[ ]"
+        test tokenList "[:a :a]"
+        test tokenList "( :a [:b :c])"
+        test tokenList "[:a ]"
+        test tokenList "[ :a]"
+        test tokenList "[]"
+        test tokenList "[ ]"
 
-        test form "{ :a :b }"
-        test form "{ :a,:b }"
-        test form "{ :a ,:b }"
-        test form "{ :a, :b }"
+        test tokenList "{ :a :b }"
+        test tokenList "{ :a,:b }"
+        test tokenList "{ :a ,:b }"
+        test tokenList "{ :a, :b }"
 
-        test parser "   :a  "
+        test tokenList "   :a  "
     ]
 

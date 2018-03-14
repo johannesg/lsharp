@@ -4,6 +4,7 @@ open FParsec
 open FParsec.Primitives
 open System.Text
 open Microsoft.FSharp.Collections
+open System.Diagnostics
 
 type UserState = unit
 type Parser<'t> = Parser<'t, UserState>

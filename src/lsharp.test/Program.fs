@@ -1,7 +1,8 @@
 ﻿// Learn more about F# at http://fsharp.org
 // See the 'F# Tutorial' project for more help.
 
-open Fuchu
+open Expecto
 
 [<EntryPoint>]
-let main args = defaultMainThisAssembly args
+let main args =
+    runTestsInAssembly defaultConfig args

@@ -53,6 +53,12 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Parser.fs" />
     <None Include="Script.fsx" />
+    <Compile Include="Tokenizer.fs" />
+    <None Include="ScriptTokens.fsx" />
+    <Compile Include="Core.fs" />
+    <Compile Include="Reader.fs" />
+    <Compile Include="Eval.fs" />
+    <None Include="Reader.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -97,4 +103,16 @@
       </ItemGroup>
     </When>
   </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6.2'">
+      <ItemGroup>
+        <Reference Include="System.Collections.Immutable">
+          <HintPath>..\..\packages\System.Collections.Immutable\lib\netstandard1.0\System.Collections.Immutable.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Import Project="..\..\packages\NETStandard.Library\build\NETStandard.Library.targets" Condition="Exists('..\..\packages\NETStandard.Library\build\NETStandard.Library.targets')" Label="Paket" />
 </Project>

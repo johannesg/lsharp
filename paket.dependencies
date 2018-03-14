@@ -3,6 +3,6 @@ source http://nuget.org/api/v2
 
 nuget FAKE
 nuget FParsec
-nuget Fuchu
-nuget NUnit
-nuget NUnit.Runners
+nuget Expecto
+nuget Argu
+nuget System.Collections.Immutable
