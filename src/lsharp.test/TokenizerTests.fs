@@ -2,7 +2,7 @@
 
 open Expecto
 open FParsec
-open LSharp.Core.Tokenizer
+open LSharp.Tokenizer
 
 let test p str =
     let name = sprintf "Parsing: '%s'" str

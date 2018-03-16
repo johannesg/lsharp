@@ -59,6 +59,7 @@
     <Compile Include="Reader.fs" />
     <Compile Include="Eval.fs" />
     <None Include="Reader.fsx" />
+    <Compile Include="Lang.Math.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

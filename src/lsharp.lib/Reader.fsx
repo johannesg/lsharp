@@ -1,12 +1,25 @@
-﻿#load "Core.fs"
+﻿#r "bin/Debug/System.Collections.Immutable.dll"
+#r "bin/Debug/lsharp.lib.dll"
+
+#load "Core.fs"
 #load "Reader.fs"
 #load "Eval.fs"
-open LSharp.Core.Reader
-open LSharp.Core.Eval
+
+open LSharp.Reader
+open LSharp.Eval
 
 let eval str = Result.bind evalAll (readAll str)
     
-eval "( add 1 2324) "
+eval "( add 1 (add 3 5 )) "
+read "( add 1 2324) "
+
+eval "true"
+eval "System.Math"
+
+eval "(. LSharp.Lang.Math add 2 3)"
+eval "(. System.Math Max 3 4)"
+
+read "/a"
 
 
 readAll "++ -"

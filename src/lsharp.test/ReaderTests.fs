@@ -1,7 +1,8 @@
 ﻿module LSharp.Test.ReaderTests
 
 open Expecto
-open LSharp.Core.Reader
+open LSharp.Core
+open LSharp.Reader
 
 let test str expected expectRest =
     let name = sprintf "Parsing: '%s'" str
@@ -18,12 +19,12 @@ let test str expected expectRest =
             failtest errorMsg
         //Assert.Raise(errorMsg, null, (fun x -> ()))
 
-[<Tests>]
-let parseTests = 
-    testList "Various parses" [
-        test "abc" (Symbol "abc") ""
-        test "_abc" (Symbol "_abc") ""
-        test "_abcd" (Symbol "_abcd") ""
-        test "  _abcd" (Symbol "_abcd") ""
+//[<Tests>]
+//let parseTests = 
+//    testList "Various parses" [
+//        test "abc" (Symbol "abc") ""
+//        test "_abc" (Symbol "_abc") ""
+//        test "_abcd" (Symbol "_abcd") ""
+//        test "  _abcd" (Symbol "_abcd") ""
         
-    ]
+//    ]

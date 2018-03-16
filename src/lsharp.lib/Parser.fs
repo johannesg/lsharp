@@ -1,4 +1,4 @@
-﻿module LSharp.Core.Parser
+﻿module LSharp.Parser
 
 open FParsec
 open FParsec.Primitives

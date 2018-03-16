@@ -1,4 +1,4 @@
-﻿module LSharp.Core.Tokenizer
+﻿module LSharp.Tokenizer
 
 open FParsec
 

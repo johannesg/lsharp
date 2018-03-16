@@ -2,7 +2,7 @@
 
 open Expecto
 open FParsec
-open LSharp.Core.Parser
+open LSharp.Parser
 
 let test p str =
     let name = sprintf "Parsing: '%s'" str

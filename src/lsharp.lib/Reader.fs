@@ -1,4 +1,4 @@
-﻿module LSharp.Core.Reader
+﻿module LSharp.Reader
 
 open LSharp.Core
 
@@ -66,8 +66,17 @@ let readToken (cl : char list) =
     let rest = List.skipWhile (not << isTerminatingOrWhitespace) cl
 
     match ncl with
+    | ['/'] -> Ok(Symbol "/", rest)
+    | '/' :: _ -> Error("Invalid symbol")
+    | ['.'] -> Ok (Symbol ".", rest)
     | ':' :: r -> Ok(Keyword (toStr r), rest)
-    | _ -> Ok(Symbol (toStr ncl), rest)
+    | _ ->
+        let str = toStr ncl
+        match str with
+        | "true" -> Ok (Bool( true), rest)
+        | "false" -> Ok (Bool( false), rest)
+        | "nil" -> Ok (Nil, rest)
+        | _ -> Ok(Symbol( str), rest)
 
 let readList read2 (cl : char list) =
     let rec readR l (cl : char list) =
