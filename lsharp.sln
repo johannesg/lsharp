@@ -5,13 +5,11 @@ VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2A0CE6C6-0ECB-4552-88D4-A719EBDA4F83}"
 	ProjectSection(SolutionItems) = preProject
-		build.bat = build.bat
 		build.fsx = build.fsx
-		completeBuild.bat = completeBuild.bat
-		completeBuild.fsx = completeBuild.fsx
-		foobar.bat = foobar.bat
-		foobar.fsx = foobar.fsx
-		targetTemplates.fsx = targetTemplates.fsx
+		build.cmd = build.cmd
+		build.sh = build.sh
+		paket.dependencies = paket.dependencies
+		paket.lock = paket.lock
 	EndProjectSection
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "lsharp.lib", "src\lsharp.lib\lsharp.lib.fsproj", "{92F9FAF9-0C97-41E6-BB94-12C207ADB550}"

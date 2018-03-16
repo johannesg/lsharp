@@ -38,5 +38,6 @@ packages/
 *.orig
 tools/FAKE/
 deploy/
-.paket/paket.exe
+.paket/
 .fake/
+.idea/
