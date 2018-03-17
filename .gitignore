@@ -41,3 +41,4 @@ deploy/
 .paket/
 .fake/
 .idea/
+paket-files/

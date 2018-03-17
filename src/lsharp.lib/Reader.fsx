@@ -1,5 +1,6 @@
-﻿#r "bin/Debug/System.Collections.Immutable.dll"
-#r "bin/Debug/lsharp.lib.dll"
+﻿#I "../../build"
+#r "System.Collections.Immutable.dll"
+#r "lsharp.lib.dll"
 
 #load "Core.fs"
 #load "Reader.fs"
