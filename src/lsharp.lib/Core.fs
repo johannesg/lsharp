@@ -15,10 +15,10 @@ type SpecialForm =
 | Let
 | Quote
 
-type Fn = {
-    Invoke : Form list -> Result<Form, string>
-}
-and Form = 
+//type Fn = {
+//    Invoke : Form list -> Result<Form, string>
+//}
+type Form = 
 | Empty
 | Nil
 | Bool of bool
@@ -33,5 +33,15 @@ and Form =
 | Set of ImmutableHashSet<Form>
 | Object of obj
 | Type of System.Type
-| Fn of Fn
+| Fn of ((Form -> Result<Form,string>) -> Form list -> Result<Form, string>)
 
+type EvalBuilder() =
+    member this.Bind(m, f) = Result.bind f m
+        //match m with
+        //| Ok res -> f res
+        //| Error err -> Error err
+
+    member this.Return(x) = Ok x
+    member this.ReturnFrom(x) = x
+    
+let evaluate = new EvalBuilder()

@@ -1,6 +1,7 @@
 framework: net462
 source http://nuget.org/api/v2
 
+nuget FSharp.Core
 nuget FAKE
 nuget FParsec
 nuget Expecto

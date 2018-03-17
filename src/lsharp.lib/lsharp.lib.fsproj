@@ -56,6 +56,8 @@
     <Compile Include="Tokenizer.fs" />
     <None Include="ScriptTokens.fsx" />
     <Compile Include="Core.fs" />
+    <Compile Include="SpecialForms.fs" />
+    <Compile Include="Symbols.fs" />
     <Compile Include="Reader.fs" />
     <Compile Include="Eval.fs" />
     <None Include="Reader.fsx" />
@@ -66,17 +68,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
-    <Reference Include="System.ValueTuple">
-      <HintPath>..\..\packages\System.ValueTuple.4.3.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
-    </Reference>
   </ItemGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6.2'">
       <ItemGroup>

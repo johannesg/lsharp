@@ -3,12 +3,14 @@
 
 #load "Core.fs"
 #load "Reader.fs"
+#load "Symbols.fs"
+#load "SpecialForms.fs"
 #load "Eval.fs"
 
 open LSharp.Reader
 open LSharp.Eval
 
-let eval str = Result.bind evalAll (readAll str)
+let eval str = readAll str |> Result.bind evalAll 
     
 eval "( add 1 (add 3 5 )) "
 read "( add 1 2324) "
