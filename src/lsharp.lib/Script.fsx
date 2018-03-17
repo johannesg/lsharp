@@ -1,62 +1,76 @@
-﻿// Learn more about F# at http://fsharp.org. See the 'F# Tutorial' project
-// for more guidance on F# programming.
+﻿#I "../../build"
+// #I "bin/Debug/netstandard2.0"
+#r "System.Collections.Immutable.dll"
+#r "lsharp.lib.dll"
 
-#r "../../packages/FParsec/lib/net40-client/FParsecCS.dll"
-#r "../../packages/FParsec/lib/net40-client/FParsec.dll"
-// #r "../../packages/FParsec/lib/portable-net45+win8+wp8+wpa81/FParsecCS.dll"
-// #r "../../packages/FParsec/lib/portable-net45+win8+wp8+wpa81/FParsec.dll"
-#load "Parser.fs"
-open LSharp.Core.Parser
-open FParsec
+#load "Core.fs"
+#load "Reader.fs"
+#load "Symbols.fs"
+#load "SpecialForms.fs"
+#load "Eval.fs"
 
-// Define your library scripting code here
+open LSharp.Reader
+open LSharp.Eval
 
-type UserState = unit
-type Parser<'t> = Parser<'t, UserState>
+let eval str = readAll str |> Result.bind evalAll 
+    
+eval "( add 1 (add 3 5 )) "
+read "( add 1 2324) "
 
-let test p str =
-    match run p str with
-    | Success(result, _, _) -> printfn "Success: %A" result
-    | Failure(errorMsg, _, _) -> printf "Failure: %s" errorMsg
+eval "true"
+eval "System.Math"
 
-let str s : Parser<_> = pstring s
+eval "(. LSharp.Lang.Math add 2 3)"
+eval "(. System.Math Max 3 4)"
 
-let ptrue : Parser<_> = pstring "true"
-
-
-test symbol "++ -"
-test symbol "_+a+sdf"
+read "/a"
 
 
+readAll "++ -"
+read "++ -"
 
-test pbool "false"
+read "\" asdf b sadf f \" -"
 
-test form "++"
-test form "true false"
-test form "+1e"
-test form "1"
+read "_+a+sdf"
 
-test form ":apa"
+read "false"
+read "'false"
 
-test form "( :a :a )"
-test form "(:a :a)"
-test form "(:a ) "
-test form "( :a (:b :c))"
-test form "(:a )"
-test form "( :a)"
-test form "()"
-test form "( )"
+read "++"
+read "-1234"
+read "1234"
+read " 1234 asdf"
 
-test form "[:a :a]"
-test form "( :a [:b :c])"
-test form "[:a ]"
-test form "[ :a]"
-test form "[]"
-test form "[ ]"
+read "01234"
+read "0x1234"
+read "true false "
+read "+1e2"
+read "1"
 
-test form "{ :a :b }"
-test form "{ :a,:b }"
-test form "{ :a ,:b }"
-test form "{ :a, :b :c }"
+eval ":apa"
 
-test parser "   :a  "
+eval "( :a :b)"
+read "'( :a :b )"
+read "(:a :b)"
+read "(:a ) "
+read "( :a (:b :c))"
+read "(:a )"
+read "( :a)"
+read "()"
+read "( )"
+
+eval "[:a :a]"
+read "( :a [:b :c])"
+read "[:a ]"
+read "[ :a]"
+read "[]"
+read "[ ]"
+
+read " #{ :a :b }"
+
+read "{ :a :b }"
+read "{ :a,:b }"
+read "{ :a ,:b }"
+read "{ :a, :b :c }"
+
+read " :a  "

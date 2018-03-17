@@ -1,9 +1,7 @@
-framework: net462
-source http://nuget.org/api/v2
+framework: dotnetcore2.0, netstandard2.0
+storage: none
+
+source https://www.nuget.org/api/v2
 
 nuget FSharp.Core
-nuget FAKE
-nuget FParsec
-nuget Expecto
-nuget Argu
 nuget System.Collections.Immutable

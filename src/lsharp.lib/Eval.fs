@@ -1,10 +1,10 @@
 ﻿module LSharp.Eval
 
 open LSharp.Core
-open LSharp.SpecialForms
+// open LSharp.SpecialForms
 
-open System.Collections.Immutable
-open System.Reflection
+// open System.Collections.Immutable
+// open System.Reflection
 
 let (|LookupType|_|) = function
 |  name ->

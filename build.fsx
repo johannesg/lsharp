@@ -1,47 +1,62 @@
-// include Fake lib
-// #r @".\packages\FAKE\tools\FakeLib.dll"
-#r "./packages/FAKE/tools/FakeLib.dll"
+#r "paket:
+nuget Fake.IO.FileSystem
+nuget Fake.DotNet.MsBuild
+nuget Fake.Core.Target //"
+#load "./.fake/build.fsx/intellisense.fsx"
 
-open Fake
-open Fake.Testing
-open Fake.FuchuHelper
+open Fake.Core
+open Fake.IO
+open Fake.IO.Globbing.Operators
+open Fake.DotNet
 
-// Directories
-let buildDir  = "./build/"
-let testDir   = "./test/"
-let deployDir = "./deploy/"
-let packagesDir = "./packages"
+let buildDir = "./build/"
+let testDir = "./test/"
 
-// Filesets
-let appReferences  =
+// Targets
+Target.Create "Clean" (fun _ ->
+    Shell.CleanDir buildDir
+)
+
+Target.Create "BuildApp" (fun _ ->
     !! "src/**/*.fsproj"
-      -- "src/**/*.Tests.fsproj"
+    |> MsBuild.RunRelease buildDir "Build"
+    |> Trace.Log "AppBuild-Output: "
+)
+
+Target.Create "BuildTest" (fun _ ->
+    !! "src/**/*.test.fsproj"
+      |> MsBuild.RunDebug testDir "Build"
+      |> Trace.Log "TestBuild-Output: "
+)
+
+Target.Create "Test" (fun _ ->
+    Trace.Log "AppTest-Output: " []
+            //    !! (buildDir + "lsharp.test.exe")
+            //    |> Fuchu
+)
+
+// Target.Create "Test" (fun _ ->
+//     !! (testDir + "/*.test.exe")
+//       |> NUnit3.NUnit3 (fun p ->
+//           {p with
+//                 ShadowCopy = false })
+// )
 
 // Default target
-Target "Default" (fun _ ->
-    trace "Hello World from FAKE"
+Target.Create "Default" (fun _ ->
+  Trace.trace "Hello World from FAKE"
 )
 
-Target "Compile" (fun _ ->
-    !! @"lsharp.sln"
-        |> MSBuildRelease buildDir "Build"
-        |> Log "AppBuild-Output: "
+open Fake.Core.TargetOperators
 
-    // compile all projects below src/app/
-    // MSBuildDebug buildDir "Build" appReferences
-    //     |> Log "AppBuild-Output: "
-)
+"Clean"
+    ==> "BuildApp"
+    ==> "BuildTest"
+    // ==> "Test"
+    ==> "Default"
 
-Target "Test" (fun _ ->
-               !! (buildDir + "lsharp.test.exe")
-               |> Fuchu
-)
-
-"Compile"
-==> "Default"
-
-"Compile"
-==> "Test"
+"BuildTest"
+    ==> "Test"
 
 // start build
-RunTargetOrDefault "Default"
+Target.RunOrDefault "Default"
