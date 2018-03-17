@@ -80,7 +80,7 @@ let invokeStatic eval (t : System.Type) m (args : Form list) =
     }
 
 
-let invokeDot (eval : Form -> Result<Form, string>) (args : Form list) =
+let invoke (eval : Form -> Result<Form, string>) (args : Form list) =
    let getInvoker = function
    | [] -> Error ("No arguments to dot")
    | t :: args ->
@@ -102,9 +102,28 @@ let invokeDot (eval : Form -> Result<Form, string>) (args : Form list) =
        return res
    }
 
-let invokeSpecial eval f args =
-    match f with
-    | Dot -> invokeDot eval args
-    | _ -> Error (sprintf "Special form not implented: %A" f)
-//    | Ok (String (sprintf "Execute special: %A" f))
-    
+let def (eval : Form -> Result<Form, string>) (args : Form list) =
+    match args with
+    | [Symbol sym;form] ->
+        evaluate {
+            let! var = eval form
+            Symbols.addGlobal sym var
+            return (Bool true)
+        }
+    | [_;_] -> Error "First arg must be a symbol"
+    | _ -> Error "Wrong number of arguments"
+
+// let getType (eval : Form -> Result<Form, string>) (args : Form list) =
+//     evaluate {
+        
+
+//     }
+//     Error (sprintf "Type %A not found"
+
+let specialForms =
+    Map.ofList [
+        (".", (Fn invoke))
+        ("def", (Fn def))
+    ]
+
+let tryFind name = specialForms |> Map.tryFind name

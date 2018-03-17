@@ -1,7 +1,10 @@
 ﻿#I "../../build"
 // #I "bin/Debug/netstandard2.0"
 #r "System.Collections.Immutable.dll"
-#r "lsharp.lib.dll"
+#r "lsharp.lib"
+
+System.Reflection.Assembly.Load("lsharp.lib")
+System.Type.GetType("LSharp.Lang.Math, lsharp.lib")
 
 #load "Core.fs"
 #load "Reader.fs"
@@ -19,9 +22,15 @@ read "( add 1 2324) "
 
 eval "true"
 eval "System.Math"
+eval "LSharp.Lang.Math"
+eval "."
+eval "def"
 
 eval "(. LSharp.Lang.Math add 2 3)"
 eval "(. System.Math Max 3 4)"
+eval "(def x (. LSharp.Lang.Math add 2 3))"
+
+eval "x"
 
 read "/a"
 
@@ -72,5 +81,6 @@ read "{ :a :b }"
 read "{ :a,:b }"
 read "{ :a ,:b }"
 read "{ :a, :b :c }"
+read "{ :a, { :c :d } }"
 
 read " :a  "

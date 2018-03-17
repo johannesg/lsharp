@@ -6,8 +6,8 @@
   <ItemGroup>
     <Compile Include="Core.fs" />
     <Compile Include="Reader.fs" />
-    <Compile Include="SpecialForms.fs" />
     <Compile Include="Symbols.fs" />
+    <Compile Include="SpecialForms.fs" />
     <Compile Include="Eval.fs" />
     <Compile Include="Lang.Math.fs" />
     <None Include="Script.fsx" />
