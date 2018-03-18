@@ -2,19 +2,20 @@
 
 open LSharp.Core
 
-let (|LookupType|_|) name = 
-    match System.Type.GetType(name) with
-    | null -> None
-    | t -> Some t
+// let (|LookupType|_|) name = 
+//     match System.Type.GetType(name) with
+//     | null -> None
+//     | t -> Some t
 
 let evalSymbol s =
     match Symbols.tryFindGlobal s with
     | Some s -> Ok s
-    | _ ->
-        match s with
-        | LookupType t -> Ok ( Type t )
-        //| Simple "add" -> Ok ( Object ( { Invoke = add } ))
-        | _ -> Error(sprintf "Unable to resolve symbol: %A" s)
+    | _ -> Error(sprintf "Unable to resolve symbol: %A" s)
+    // | _ ->
+    //     match s with
+    //     | LookupType t -> Ok ( Type t )
+    //     //| Simple "add" -> Ok ( Object ( { Invoke = add } ))
+    //     | _ -> Error(sprintf "Unable to resolve symbol: %A" s)
 
 let evalList eval (list : Form list) =
     let evalHead head =

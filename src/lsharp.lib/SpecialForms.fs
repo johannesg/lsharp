@@ -113,17 +113,23 @@ let def (eval : Form -> Result<Form, string>) (args : Form list) =
     | [_;_] -> Error "First arg must be a symbol"
     | _ -> Error "Wrong number of arguments"
 
-// let getType (eval : Form -> Result<Form, string>) (args : Form list) =
-//     evaluate {
-        
-
-//     }
-//     Error (sprintf "Type %A not found"
+let defType (eval : Form -> Result<Form, string>) (args : Form list) =
+    match args with
+    | [String fullName] ->
+        let typeName :: _ = List.ofArray (fullName.Split(','))
+        match System.Type.GetType(fullName) with
+        | null -> Error (sprintf "Type not found: %s" typeName)
+        | t ->
+            Symbols.addGlobal typeName (Type t)
+            Ok (Bool true)
+    | [_] -> Error "First arg must be a string"
+    | _ -> Error "Wrong number of arguments"
 
 let specialForms =
     Map.ofList [
         (".", (Fn invoke))
         ("def", (Fn def))
+        ("deftype", (Fn defType))
     ]
 
 let tryFind name = specialForms |> Map.tryFind name
