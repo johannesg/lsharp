@@ -10,6 +10,7 @@ System.Type.GetType("LSharp.Lang.Math, lsharp.lib")
 #load "Reader.fs"
 #load "Symbols.fs"
 #load "SpecialForms.fs"
+#load "Macro.fs"
 #load "Eval.fs"
 
 open LSharp.Reader
@@ -32,10 +33,16 @@ eval "(. System.Type GetType \"LSharp.Lang.Math\")"
 eval "(. LSharp.Lang.Math add 2 3)"
 eval "(. System.Math Max 3 4)"
 eval "(def x (. LSharp.Lang.Math add 2 3))"
+eval "(def x 23)"
+eval "[:a :a '(:a) x]"
+eval "(defmacro m [a b c] a)"
 
 eval "x"
+eval "m"
+eval "(m 23)"
 
 read "/a"
+eval "'."
 
 
 readAll "++ -"
@@ -69,9 +76,8 @@ read "( :a (:b :c))"
 read "(:a )"
 read "( :a)"
 read "()"
-read "( )"
+read "(x)"
 
-eval "[:a :a]"
 read "( :a [:b :c])"
 read "[:a ]"
 read "[ :a]"
@@ -79,6 +85,7 @@ read "[]"
 read "[ ]"
 
 read " #{ :a :b }"
+
 
 read "{ :a :b }"
 read "{ :a,:b }"

@@ -33,15 +33,24 @@ let evalList eval (list : Form list) =
             let! head' = evalHead head
             return!
                 match head' with
-                | Fn fn -> fn eval args
+                | SpecialForm fn -> fn eval args
+                | Macro (ma,mb) -> Macro.callMacro eval (ma,mb) args
                 | _ -> Error "Not a function"
         }
+
+let evalVector eval (vec : Form array) =
+    let vec' = Array.map eval vec
+    match Array.tryFind hasError vec' with
+    | Some (Error err) -> Error err
+    | _ ->
+        Ok (Vector (Array.choose result vec'))
 
 let rec eval (form : Form) =
     match form with
     | Symbol s -> evalSymbol s
     | Quote f -> Ok f
     | List l -> evalList eval l
+    | Vector v -> evalVector eval v
     | _ -> Ok form
 
 let evalAll (forms : Form list) =

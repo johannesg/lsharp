@@ -5,19 +5,22 @@ open System.Collections.Immutable
 type Number = int
 //| Int32 of int
 
-type SpecialForm =
-| Dot
-| Def
-| DefMacro
-| Fn
-| If
-| Do
-| Let
-| Quote
+// type SpecialForm =
+// | Dot
+// | Def
+// | DefMacro
+// | Fn
+// | If
+// | Do
+// | Let
+// | Quote
 
 //type Fn = {
 //    Invoke : Form list -> Result<Form, string>
 //}
+// type Macro = {
+
+// }
 type Form = 
 | Empty
 | Nil
@@ -33,7 +36,8 @@ type Form =
 | Set of ImmutableHashSet<Form>
 | Object of obj
 | Type of System.Type
-| Fn of ((Form -> Result<Form,string>) -> Form list -> Result<Form, string>)
+| SpecialForm of ((Form -> Result<Form,string>) -> Form list -> Result<Form, string>)
+| Macro of Form array * Form list
 
 type EvalBuilder() =
     member this.Bind(m, f) = Result.bind f m
@@ -45,3 +49,11 @@ type EvalBuilder() =
     member this.ReturnFrom(x) = x
     
 let evaluate = new EvalBuilder()
+
+let hasError = function
+| Ok _ -> false
+| Error _ -> true
+
+let result = function
+| Ok res -> Some res
+| Error _ -> None

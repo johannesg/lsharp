@@ -8,6 +8,7 @@
     <Compile Include="Reader.fs" />
     <Compile Include="Symbols.fs" />
     <Compile Include="SpecialForms.fs" />
+    <Compile Include="Macro.fs" />
     <Compile Include="Eval.fs" />
     <Compile Include="Lang.Math.fs" />
     <None Include="Script.fsx" />

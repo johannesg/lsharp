@@ -3,30 +3,21 @@ module LSharp.SpecialForms
 open LSharp.Core
 open System.Reflection
 
-let (|SpecialForm|_|) form =
-    match form with
-    | Symbol s -> 
-        match s with
-        | "." -> Some Dot
-        | "def" -> Some Def
-        | "defmacro" -> Some DefMacro
-        | "fn" -> Some SpecialForm.Fn
-        | _ -> None
-    | _ -> None
+// let (|SpecialForm|_|) form =
+//     match form with
+//     | Symbol s -> 
+//         match s with
+//         | "." -> Some Dot
+//         | "def" -> Some Def
+//         | "defmacro" -> Some DefMacro
+//         | "fn" -> Some SpecialForm.Fn
+//         | _ -> None
+//     | _ -> None
     
 //let getType args =
 //    match args with
 //    | [] -> Error "Wrong number of arguments"
 //    | Symbol s :: args -> 
-
-let hasError = function
-| Ok _ -> false
-| Error _ -> true
-
-let result = function
-| Ok res -> Some res
-| Error _ -> None
-
 
 let formToObject = function
 | Number x -> Ok (x :> obj)
@@ -125,11 +116,20 @@ let defType (eval : Form -> Result<Form, string>) (args : Form list) =
     | [_] -> Error "First arg must be a string"
     | _ -> Error "Wrong number of arguments"
 
+let defMacro (eval : Form -> Result<Form, string>) (args : Form list) =
+    match args with
+    | Symbol name :: Vector args' :: body ->
+        Symbols.addGlobal name (Macro (args', body))
+        Ok (Bool true)
+    | _ ->
+        Error "Wrong arguments"
+
 let specialForms =
     Map.ofList [
-        (".", (Fn invoke))
-        ("def", (Fn def))
-        ("deftype", (Fn defType))
+        (".",           (SpecialForm invoke))
+        ("def",         (SpecialForm def))
+        ("deftype",     (SpecialForm defType))
+        ("defmacro",    (SpecialForm defMacro))
     ]
 
 let tryFind name = specialForms |> Map.tryFind name
